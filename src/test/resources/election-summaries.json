@@ -1,0 +1,46 @@
+{
+  "format": "linked-data-api",
+  "result": {
+    "_about": "http://lda.data.parliament.uk/elections.json?_view=Elections&_pageSize=376&_page=0",
+    "definition": "http://lda.data.parliament.uk/meta/elections.json?_view=Elections",
+    "extendedMetadataVersion": "http://lda.data.parliament.uk/elections.json?_view=Elections&_metadata=all&_pageSize=376&_page=0",
+    "first": "http://lda.data.parliament.uk/elections.json?_view=Elections&_page=0",
+    "isPartOf": {
+      "_about": "http://lda.data.parliament.uk/elections.json?_view=Elections",
+      "definition": "http://lda.data.parliament.uk/meta/elections.json?_view=Elections",
+      "hasPart": "http://lda.data.parliament.uk/elections.json?_view=Elections&_pageSize=376&_page=0",
+      "type": "http://purl.org/linked-data/api/vocab#ListEndpoint"
+    },
+    "items": [
+      {
+        "_about": "http://data.parliament.uk/resources/730039",
+        "date": {
+          "_datatype": "dateTime",
+          "_value": "2017-06-08"
+        },
+        "electionType": "General Election",
+        "label": {
+          "_value": "2017 General Election"
+        }
+      },
+      {
+        "_about": "http://data.parliament.uk/resources/694150",
+        "date": {
+          "_datatype": "dateTime",
+          "_value": "2017-02-23"
+        },
+        "electionType": "By-election",
+        "label": {
+          "_value": "23-Feb-2017 By-election"
+        }
+      }
+    ],
+    "itemsPerPage": 376,
+    "next": "http://lda.data.parliament.uk/elections.json?_view=Elections&_page=1",
+    "page": 0,
+    "startIndex": 1,
+    "totalResults": 376,
+    "type": "http://purl.org/linked-data/api/vocab#Page"
+  },
+  "version": "0.2"
+}
