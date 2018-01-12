@@ -12,7 +12,8 @@ libraryDependencies ++= Seq(
   json4sNative,
   json4sJackson,
   "org.sorm-framework" % "sorm" % "0.3.21",
-  "com.h2database" % "h2" % "1.4.192"
+  "com.h2database" % "h2" % "1.4.192",
+  "org.apache.kafka" %% "kafka" % "0.10.1.1"
 )
 
 dependencyOverrides += "org.scala-lang" % "scala-compiler" % scalaVersion.value
