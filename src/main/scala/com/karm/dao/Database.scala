@@ -1,23 +1,16 @@
 package com.karm.dao
 
-import java.util.Locale
-
+import com.karm.model.{Constituency, ElectionSummary}
 import sorm.{Entity, InitMode, Instance}
 
-class Database {
-  val dbUrl = "jdbc:postgresql://localhost/test"
-}
-
 object Database extends Instance(
-
-
   entities = Set(
-//    Entity[Constituency](),
-//    Entity[ElectionSummary](),
-    Entity[Locale](unique = Set() + Seq("code"))
+    Entity[Constituency](),
+    Entity[ElectionSummary]()
   ),
-  url = "jdbc:postgresql://localhost/test",
-  user = "postgres",
-  password = "password",
+  url = "jdbc:h2:mem:test;MODE=PostgreSQL",
+  user = "",
+  password = "",
+  timeout = 10,
   initMode = InitMode.Create
 )
