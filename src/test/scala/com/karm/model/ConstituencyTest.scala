@@ -27,7 +27,12 @@ class ConstituencyTest extends FlatSpec with Matchers{
 
     constituents.head.label shouldBe "Aberavon"
     constituents(2).label shouldBe "Aberavon"
+  }
 
+  "getConstituentsJson" should "return the json data" in {
+    val data = DataFilesDownloader.getConstituenciesData
+    data==null shouldBe false
+    data.length>1 shouldBe true
   }
 
 }

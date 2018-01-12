@@ -29,4 +29,11 @@ class ElectionSummaryTest extends FlatSpec with Matchers{
     electionSummaries(1).label shouldBe "23-Feb-2017 By-election"
   }
 
+  "getElectionSummariesJson" should "return the json data" in {
+    val data = DataFilesDownloader.getElectionsJson
+    data==null shouldBe false
+    data.length>1 shouldBe true
+  }
+
+
 }
