@@ -9,13 +9,25 @@ object DataFilesDownloader extends App {
 
   /* assigned the web calls to values so that I can easily breakpoint + debug */
 
+  /*
+  http://lda.data.parliament.uk/members.json
+  http://lda.data.parliament.uk/members.json?_pageSize=5000&_page=0
+
+
+   */
+
   def getElectionsJson: String = {
-    val json = callUrl("http://lda.data.parliament.uk/elections.json?_view=Elections&_pageSize=376&_page=0")
+    val json = callUrl("http://lda.data.parliament.uk/elections.json?_view=Elections&_pageSize=1000&_page=0")
     json
   }
 
-  def getConstituenciesData: String = {
-    val json = callUrl("http://lda.data.parliament.uk/constituencies.json")
+  def getConstituenciesJson: String = {
+    val json = callUrl("http://lda.data.parliament.uk/constituencies.json?_pageSize=5000&_page=0")
+    json
+  }
+
+  def getMembersJson: String = {
+    val json = callUrl("http://lda.data.parliament.uk/members.json?_pageSize=5000&_page=0")
     json
   }
 

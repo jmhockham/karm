@@ -30,7 +30,7 @@ class ConstituencyTest extends FlatSpec with Matchers{
   }
 
   "getConstituentsJson" should "return the json data" in {
-    val data = DataFilesDownloader.getConstituenciesData
+    val data = DataFilesDownloader.getConstituenciesJson
     data==null shouldBe false
     data.length>1 shouldBe true
   }

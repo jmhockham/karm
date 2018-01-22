@@ -15,6 +15,10 @@ case class ElectionSummary
 
 object ElectionSummary {
 
+  //TODO these should be a trait
+  val ELECTION_TYPE_GENERAL = "General Election"
+  val ELECTION_TYPE_BY = "By-election"
+
   implicit val formats = DefaultFormats
 
   def fromJson(json: JValue): ElectionSummary = {
