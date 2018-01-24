@@ -13,6 +13,7 @@ case class Member
   twitter: String,
   birthDate: String,
   deathDate: String,
+  party: String,
   constituency: Option[Constituency] = None
 ) {
 
@@ -23,11 +24,12 @@ object Member {
   implicit val formats = DefaultFormats
 
   def fromJson(json: JValue): Member = {
-    val fullName = (json \ "fullName").values.toString
+    val fullName = (json \ "fullName" \ "_value").values.toString
     val label = (json \ "label" \ "_value").values.toString
-    val twitter = (json \ "twitter").values.toString
+    val twitter = (json \ "twitter" \ "_value").values.toString
     val birthDate = (json \ "birthDate" \ "_value").values.toString
     val deathDate = (json \ "deathDate" \ "_value").values.toString
-    new Member(fullName, label, twitter, birthDate, deathDate)
+    val party = (json \ "party" \ "_value").values.toString
+    new Member(fullName, label, twitter, birthDate, deathDate, party)
   }
 }

@@ -1,6 +1,6 @@
 package com.karm.datafeed
 
-import com.karm.model.{Constituency, ElectionSummary}
+import com.karm.model.{Constituency, ElectionSummary, Member}
 import org.json4s.{DefaultFormats, JValue}
 
 object DataFilesDownloader extends App {
@@ -31,15 +31,21 @@ object DataFilesDownloader extends App {
     json
   }
 
-  def getElectionSummaries(json: JValue) = {
+  def getElectionSummaries(json: JValue): List[ElectionSummary] = {
     (json \\ "items").children.map { x =>
       ElectionSummary.fromJson(x)
     }
   }
 
-  def getConstituents(json: JValue) = {
+  def getConstituents(json: JValue): List[Constituency] = {
     (json \\ "items").children.map { x =>
       Constituency.fromJson(x)
+    }
+  }
+
+  def getMembers(json: JValue): List[Member] = {
+    (json \\ "items").children.map { x =>
+      Member.fromJson(x)
     }
   }
 
