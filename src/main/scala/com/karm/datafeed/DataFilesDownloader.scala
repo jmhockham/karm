@@ -2,6 +2,7 @@ package com.karm.datafeed
 
 import com.karm.model.{Constituency, ElectionSummary, Member}
 import org.json4s.{DefaultFormats, JValue}
+import org.json4s.jackson.JsonMethods.parse
 
 object DataFilesDownloader extends App {
 
@@ -16,7 +17,7 @@ object DataFilesDownloader extends App {
 
    */
 
-  def getElectionsJson: String = {
+  def getElectionSummariesJson: String = {
     val json = callUrl("http://lda.data.parliament.uk/elections.json?_view=Elections&_pageSize=1000&_page=0")
     json
   }
@@ -31,22 +32,37 @@ object DataFilesDownloader extends App {
     json
   }
 
-  def getElectionSummaries(json: JValue): List[ElectionSummary] = {
+  def getElectionSummariesFromJson(json: JValue): List[ElectionSummary] = {
     (json \\ "items").children.map { x =>
       ElectionSummary.fromJson(x)
     }
   }
 
-  def getConstituents(json: JValue): List[Constituency] = {
+  def getConstituentsFromJson(json: JValue): List[Constituency] = {
     (json \\ "items").children.map { x =>
       Constituency.fromJson(x)
     }
   }
 
-  def getMembers(json: JValue): List[Member] = {
+  def getMembersFromJson(json: JValue): List[Member] = {
     (json \\ "items").children.map { x =>
       Member.fromJson(x)
     }
+  }
+
+  def getElectionSummaries(): List[ElectionSummary] = {
+    val jValue = parse(getElectionSummariesJson)
+    getElectionSummariesFromJson(jValue)
+  }
+
+  def getConstituents(): List[Constituency] = {
+    val jValue = parse(getConstituenciesJson)
+    getConstituentsFromJson(jValue)
+  }
+
+  def getMembers(): List[Member] = {
+    val jValue = parse(getMembersJson)
+    getMembersFromJson(jValue)
   }
 
   private def callUrl(url: String): String = {

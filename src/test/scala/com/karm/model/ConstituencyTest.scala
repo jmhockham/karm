@@ -12,7 +12,7 @@ class ConstituencyTest extends FlatSpec with Matchers{
 
   "getConstituents" should "parse the json correctly" in {
     val jValue = parse(constituenciesJson)
-    val constituents = DataFilesDownloader.getConstituents(jValue)
+    val constituents = DataFilesDownloader.getConstituentsFromJson(jValue)
 
     constituents.size shouldBe 10
 

@@ -3,7 +3,7 @@ package com.karm.dao
 import java.io.File
 
 import com.karm.datafeed.DataFilesDownloader
-import com.karm.model.{Constituency, ElectionSummary}
+import com.karm.model.{Constituency, ElectionSummary, Member}
 import org.json4s.jackson.JsonMethods.parse
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -11,10 +11,11 @@ class DatabaseTest extends FlatSpec with Matchers {
 
   private val electionJson = new File(getClass.getResource("/election-summaries.json").getPath)
   private val constituenciesJson = new File(getClass.getResource("/constituencies.json").getPath)
+  private val membersJson = new File(getClass.getResource("/members.json").getPath)
 
   "Database" should "be able to persist constituency entities" in {
     val jValue = parse(electionJson)
-    val constituencies = DataFilesDownloader.getConstituents(jValue)
+    val constituencies = DataFilesDownloader.getConstituentsFromJson(jValue)
 
     //we can assign the results of an insert to a value
     val constituency = Database.save(constituencies.head)
@@ -27,7 +28,7 @@ class DatabaseTest extends FlatSpec with Matchers {
 
   it should "be able to persist election entities" in {
     val jValue = parse(constituenciesJson)
-    val electionSummaries = DataFilesDownloader.getElectionSummaries(jValue)
+    val electionSummaries = DataFilesDownloader.getElectionSummariesFromJson(jValue)
 
     val electionSummary = Database.save(electionSummaries.head)
     electionSummary.id shouldBe 1
@@ -35,6 +36,18 @@ class DatabaseTest extends FlatSpec with Matchers {
     val maybeElectionSummary = Database.query[ElectionSummary].whereEqual("id", 1).fetchOne()
     maybeElectionSummary.nonEmpty shouldBe true
     maybeElectionSummary.get.id shouldBe 1
+  }
+
+  it should "be able to persist member entities" in {
+    val jValue = parse(membersJson)
+    val members = DataFilesDownloader.getMembersFromJson(jValue)
+
+    val member = Database.save(members.head)
+    member.id shouldBe 1
+
+    val maybeMember = Database.query[Member].whereEqual("id", 1).fetchOne()
+    maybeMember.nonEmpty shouldBe true
+    maybeMember.get.id shouldBe 1
   }
 
 }

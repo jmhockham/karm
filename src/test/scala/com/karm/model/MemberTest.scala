@@ -12,7 +12,7 @@ class MemberTest extends FlatSpec with Matchers {
 
   "getMembers" should "parse the json correctly" in {
     val jValue = parse(memberJson)
-    val members = DataFilesDownloader.getMembers(jValue)
+    val members = DataFilesDownloader.getMembersFromJson(jValue)
 
     members.size shouldBe 4434
 

@@ -12,7 +12,7 @@ class ElectionSummaryTest extends FlatSpec with Matchers{
 
   "getElectionSummaries" should "parse the json correctly" in {
     val jValue = parse(electionJson)
-    val electionSummaries = DataFilesDownloader.getElectionSummaries(jValue)
+    val electionSummaries = DataFilesDownloader.getElectionSummariesFromJson(jValue)
 
     electionSummaries.size shouldBe 2
 
@@ -30,7 +30,7 @@ class ElectionSummaryTest extends FlatSpec with Matchers{
   }
 
   "getElectionSummariesJson" should "return the json data" in {
-    val data = DataFilesDownloader.getElectionsJson
+    val data = DataFilesDownloader.getElectionSummariesJson
     data==null shouldBe false
     data.length>1 shouldBe true
   }

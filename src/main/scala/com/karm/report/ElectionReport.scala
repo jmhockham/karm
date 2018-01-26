@@ -6,9 +6,9 @@ import com.karm.model.ElectionSummary
 import org.json4s.jackson.JsonMethods.parse
 
 object ElectionReport extends App {
-  private val electionsJson = DataFilesDownloader.getElectionsJson
+  private val electionsJson = DataFilesDownloader.getElectionSummariesJson
   val jValue = parse(electionsJson)
-  val electionSummaries = DataFilesDownloader.getElectionSummaries(jValue)
+  val electionSummaries = DataFilesDownloader.getElectionSummariesFromJson(jValue)
 
   val savedStuff = electionSummaries.map { e =>
     val summary = Database.save(e)
