@@ -14,7 +14,7 @@ case class Member
   birthDate: String,
   deathDate: String,
   party: String,
-  isLord: Boolean,
+  isInLords: Boolean,
   constituencyUrl: String,
   constituency: Option[Constituency] = None
 ) {
@@ -32,8 +32,29 @@ object Member {
     val birthDate = (json \ "birthDate" \ "_value").values.toString
     val deathDate = (json \ "deathDate" \ "_value").values.toString
     val party = (json \ "party" \ "_value").values.toString
-    val isInLords = fullName.contains("Lord") || fullName.contains("Lady")
+//    val isInLords = isLords(fullName)
     val constituencyUrl = (json \ "constituency" \ "_about").values.toString
-    new Member(fullName, label, twitter, birthDate, deathDate, party, isInLords, constituencyUrl)
+
+    val isInLords = !hasConstituency(constituencyUrl)
+
+    new Member(
+      fullName = fullName,
+      label = label,
+      twitter = twitter,
+      birthDate = birthDate,
+      deathDate = deathDate,
+      party = party,
+      isInLords = isInLords,
+      constituencyUrl = constituencyUrl
+    )
   }
+
+  private def isLords(fullName: String): Boolean = {
+    fullName.contains("Lord") || fullName.contains("Lady") || fullName.contains("Baron")
+  }
+
+  private def hasConstituency(constituencyUrl: String): Boolean = {
+    constituencyUrl!=null && constituencyUrl.nonEmpty && constituencyUrl!="None"
+  }
+
 }

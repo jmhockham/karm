@@ -19,4 +19,4 @@ libraryDependencies ++= Seq(
 
 dependencyOverrides += "org.scala-lang" % "scala-compiler" % scalaVersion.value
 
-ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
+//ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
