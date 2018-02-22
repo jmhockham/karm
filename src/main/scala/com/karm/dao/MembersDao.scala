@@ -5,9 +5,9 @@ import sorm.Dsl._
 
 object MembersDao {
   def getLords() = {
-    Database.query[Member].where("isInLords" equal "true").fetch()
+    Database.query[Member].where("isInLords" equal true).fetch()
   }
   def getCommons() = {
-    Database.query[Member].where("isInLords" equal "false").fetch()
+    Database.query[Member].where("isInLords" equal false).fetch()
   }
 }
