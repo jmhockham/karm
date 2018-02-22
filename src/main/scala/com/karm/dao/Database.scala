@@ -13,9 +13,10 @@ object Database extends Instance(
     Entity[ElectionSummary](),
     Entity[Member]()
   ),
-  url = "jdbc:h2:mem:test;MODE=PostgreSQL",
-  user = "",
-  password = "",
+//  url = "jdbc:h2:mem:test;MODE=PostgreSQL",
+  url = "jdbc:postgresql://localhost/karm",
+  user = "karm",
+  password = "karm",
   timeout = 10,
-  initMode = InitMode.Create
+  initMode = InitMode.DropAllCreate
 )

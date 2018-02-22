@@ -1,10 +1,22 @@
 { "format" : "linked-data-api", "version" : "0.2", "result" : {"_about" : "http://lda.data.parliament.uk/terms.json?_pageSize=500000&_page=0", "definition" : "http://lda.data.parliament.uk/meta/terms.json", "extendedMetadataVersion" : "http://lda.data.parliament.uk/terms.json?_metadata=all&_pageSize=500000&_page=0", "first" : "http://lda.data.parliament.uk/terms.json?_page=0", "isPartOf" : {"_about" : "http://lda.data.parliament.uk/terms.json", "definition" : "http://lda.data.parliament.uk/meta/terms.json", "hasPart" : "http://lda.data.parliament.uk/terms.json?_pageSize=500000&_page=0", "type" : "http://purl.org/linked-data/api/vocab#ListEndpoint"}
-    , "items" : [{"_about" : "http://data.parliament.uk/terms/97792", "attribute" : "ORG", "class" : "", "exactMatch" : {"_about" : "http://data.parliament.uk/terms/20390", "prefLabel" : {"_value" : "Children are Unbeatable!"}
+    , "items" : [
+    {
+      "_about" : "http://data.parliament.uk/terms/97792",
+      "attribute" : "ORG",
+      "class" : "",
+      "exactMatch" : {
+        "_about" : "http://data.parliament.uk/terms/20390",
+        "prefLabel" : {"_value" : "Children are Unbeatable!"}
       }
       , "isPreferred" : {"_value" : "false", "_datatype" : "boolean"}
       , "prefLabel" : {"_value" : "'Sdim Curo Plant!"}
     }
-    , {"_about" : "http://data.parliament.uk/terms/8192", "attribute" : "ID", "broader" : {"_about" : "http://data.parliament.uk/terms/92238", "prefLabel" : {"_value" : "Official residences"}
+    , {
+      "_about" : "http://data.parliament.uk/terms/8192",
+      "attribute" : "ID",
+      "broader" : {
+        "_about" : "http://data.parliament.uk/terms/92238",
+        "prefLabel" : {"_value" : "Official residences"}
       }
       , "class" : "ID", "isPreferred" : {"_value" : "true", "_datatype" : "boolean"}
       , "prefLabel" : {"_value" : "1 Carlton Gardens"}
