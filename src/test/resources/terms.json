@@ -7,9 +7,9 @@
       "exactMatch" : {
         "_about" : "http://data.parliament.uk/terms/20390",
         "prefLabel" : {"_value" : "Children are Unbeatable!"}
-      }
-      , "isPreferred" : {"_value" : "false", "_datatype" : "boolean"}
-      , "prefLabel" : {"_value" : "'Sdim Curo Plant!"}
+      },
+      "isPreferred" : {"_value" : "false", "_datatype" : "boolean"},
+      "prefLabel" : {"_value" : "'Sdim Curo Plant!"}
     }
     , {
       "_about" : "http://data.parliament.uk/terms/8192",
@@ -21,9 +21,12 @@
       , "class" : "ID", "isPreferred" : {"_value" : "true", "_datatype" : "boolean"}
       , "prefLabel" : {"_value" : "1 Carlton Gardens"}
     }
-    , {"_about" : "http://data.parliament.uk/terms/414673", "attribute" : "ID", "broader" : {"_about" : "http://data.parliament.uk/terms/414669", "prefLabel" : {"_value" : "Parliamentary estate"}
-      }
-      , "class" : "ID", "isPreferred" : {"_value" : "true", "_datatype" : "boolean"}
+    , {
+        "_about" : "http://data.parliament.uk/terms/414673",
+        "attribute" : "ID",
+        "broader" : {"_about" : "http://data.parliament.uk/terms/414669","prefLabel" : {"_value" : "Parliamentary estate"}},
+        "class" : "ID",
+        "isPreferred" : {"_value" : "true", "_datatype" : "boolean"}
       , "prefLabel" : {"_value" : "1 Parliament Street"}
     }
     , {"_about" : "http://data.parliament.uk/terms/8196", "attribute" : "ID", "broader" : {"_about" : "http://data.parliament.uk/terms/421921", "prefLabel" : {"_value" : "Names of employment schemes"}

@@ -32,7 +32,6 @@ object Member {
     val birthDate = (json \ "birthDate" \ "_value").values.toString
     val deathDate = (json \ "deathDate" \ "_value").values.toString
     val party = (json \ "party" \ "_value").values.toString
-//    val isInLords = isLords(fullName)
     val constituencyUrl = (json \ "constituency" \ "_about").values.toString
 
     val isInLords = !hasConstituency(constituencyUrl)
@@ -47,10 +46,6 @@ object Member {
       isInLords = isInLords,
       constituencyUrl = constituencyUrl
     )
-  }
-
-  private def isLords(fullName: String): Boolean = {
-    fullName.contains("Lord") || fullName.contains("Lady") || fullName.contains("Baron")
   }
 
   private def hasConstituency(constituencyUrl: String): Boolean = {

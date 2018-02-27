@@ -1,6 +1,6 @@
 package com.karm.datafeed
 
-import com.karm.model.{Constituency, ElectionSummary, Member}
+import com.karm.model.{Constituency, ElectionSummary, Member, Term}
 import org.json4s.{DefaultFormats, JValue}
 import org.json4s.jackson.JsonMethods.parse
 
@@ -11,11 +11,10 @@ object DataFilesDownloader extends App {
   /* assigned the web calls to values so that I can easily breakpoint + debug */
 
   /*
+  format for a given entity, and the page size parameter
   http://lda.data.parliament.uk/members.json
   http://lda.data.parliament.uk/members.json?_pageSize=5000&_page=0
-
-
-   */
+  */
 
   def getElectionSummariesJson: String = {
     val json = callUrl("http://lda.data.parliament.uk/elections.json?_view=Elections&_pageSize=1000&_page=0")
@@ -29,6 +28,13 @@ object DataFilesDownloader extends App {
 
   def getMembersJson: String = {
     val json = callUrl("http://lda.data.parliament.uk/members.json?_pageSize=5000&_page=0")
+    json
+  }
+
+  //there are a bit less than 115,000 terms
+  //TODO append the rest of the terms - probably don't want to get them all in one hit
+  def getTermsJson: String = {
+    val json = callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=0")
     json
   }
 
@@ -50,6 +56,12 @@ object DataFilesDownloader extends App {
     }
   }
 
+  def getTermsFromJson(json: JValue): List[Term] = {
+    (json \\ "items").children.map { x =>
+      Term.fromJson(x)
+    }
+  }
+
   def getElectionSummaries(): List[ElectionSummary] = {
     val jValue = parse(getElectionSummariesJson)
     getElectionSummariesFromJson(jValue)
@@ -63,6 +75,11 @@ object DataFilesDownloader extends App {
   def getMembers(): List[Member] = {
     val jValue = parse(getMembersJson)
     getMembersFromJson(jValue)
+  }
+
+  def getTerms(): List[Term] = {
+    val jValue = parse(getTermsJson)
+    getTermsFromJson(jValue)
   }
 
   private def callUrl(url: String): String = {
