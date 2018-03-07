@@ -4,6 +4,8 @@ import com.karm.model.{Constituency, ElectionSummary, Member, Term}
 import org.json4s.{DefaultFormats, JValue}
 import org.json4s.jackson.JsonMethods.parse
 
+import scala.annotation.tailrec
+
 object DataFilesDownloader extends App {
 
   implicit val formats = DefaultFormats
@@ -33,9 +35,32 @@ object DataFilesDownloader extends App {
 
   //there are a bit less than 115,000 terms
   //TODO append the rest of the terms - probably don't want to get them all in one hit
-  def getTermsJson: String = {
-    val json = callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=0")
+  //seems like we can only get up to page 7; 8+ throws a timeout every time
+  def getTermsJson(pageNo: Int): String = {
+    val json = callUrl(s"http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=$pageNo")
     json
+    /*json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=1")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=2")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=3")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=4")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=5")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=6")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=7")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=8")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=9")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=10")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=11")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=12")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=13")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=14")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=15")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=16")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=17")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=18")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=19")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=20")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=21")
+    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=22")*/
   }
 
   def getElectionSummariesFromJson(json: JValue): List[ElectionSummary] = {
@@ -77,9 +102,27 @@ object DataFilesDownloader extends App {
     getMembersFromJson(jValue)
   }
 
-  def getTerms(): List[Term] = {
-    val jValue = parse(getTermsJson)
-    getTermsFromJson(jValue)
+  lazy val TERMS_PAGE_LIMIT: Int = 22
+
+  @tailrec
+  def getTerms(currentPage:Int = 0, terms: List[Term] = Nil): List[Term] = {
+    if (currentPage>=TERMS_PAGE_LIMIT){
+      getTermsForPage(currentPage) ++ terms
+    }
+    else{
+      val termsForPage:List[Term] = getTermsForPage(currentPage)
+      val termsToPass = if (terms.nonEmpty) {
+        terms ++ termsForPage
+      } else {
+        termsForPage
+      }
+      getTerms(currentPage + 1, termsToPass)
+    }
+  }
+
+  def getTermsForPage(pageNo: Int): List[Term] = {
+      val jValue = parse(getTermsJson(pageNo))
+      getTermsFromJson(jValue)
   }
 
   private def callUrl(url: String): String = {

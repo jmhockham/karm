@@ -22,7 +22,7 @@ object Term {
 
   def fromJson(json: JValue): Term ={
     new Term(
-      about = (json \ "about").values.toString,
+      about = (json \ "_about").values.toString,
       attribute = (json \ "attribute").values.toString,
       classification = (json \ "class").values.toString,
       broaderTerm = None,
