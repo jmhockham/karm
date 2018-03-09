@@ -102,7 +102,8 @@ object DataFilesDownloader extends App {
     getMembersFromJson(jValue)
   }
 
-  lazy val TERMS_PAGE_LIMIT: Int = 22
+//  lazy val TERMS_PAGE_LIMIT: Int = 22
+  lazy val TERMS_PAGE_LIMIT: Int = 7
 
   @tailrec
   def getTerms(currentPage:Int = 0, terms: List[Term] = Nil): List[Term] = {

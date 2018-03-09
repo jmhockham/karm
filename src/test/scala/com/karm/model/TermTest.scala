@@ -22,8 +22,11 @@ class TermTest extends FlatSpec with Matchers {
     head.classification shouldBe ""
     head.broaderTerm shouldBe None
     head.exactTerm shouldBe None
-    head.isPreferred shouldBe None
+    head.isPreferred shouldBe Some(false)
     head.prefLabel shouldBe "'Sdim Curo Plant!"
+
+    val exactTerm = Term.fromJson(head.exactTermJson.get)
+    exactTerm.prefLabel shouldBe "Children are Unbeatable!"
   }
 
   "getTermsJson" should "return the json data" in {

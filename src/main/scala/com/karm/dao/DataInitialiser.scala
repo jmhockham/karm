@@ -39,5 +39,9 @@ object DataInitialiser {
 
     membersOfCommons.map(Database.save(_))
     membersOfLords.map(Database.save(_))
+
+    productionLogger.debug("Persisting terms")
+    val terms = DataFilesDownloader.getTerms()
+    terms.map(Database.save(_))
   }
 }
