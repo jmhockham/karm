@@ -6,7 +6,7 @@ import org.json4s.jackson.JsonMethods.parse
 
 import scala.annotation.tailrec
 
-object DataFilesDownloader extends App {
+object VotingDataFilesDownloader extends App {
 
   implicit val formats = DefaultFormats
 

@@ -6,7 +6,7 @@ import org.scalatest.{FlatSpec, Matchers}
 
 class MemberDaoTest extends FlatSpec with Matchers {
 
-  DataInitialiser.init()
+  VotingDataInitialiser.init()
 
   //we're going to use rough counts, as the live data can change as members come and go
   "Members table" should "have data" in {

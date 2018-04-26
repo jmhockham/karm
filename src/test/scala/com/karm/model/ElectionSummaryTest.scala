@@ -2,7 +2,7 @@ package com.karm.model
 
 import java.io.File
 
-import com.karm.datafeed.DataFilesDownloader
+import com.karm.datafeed.VotingDataFilesDownloader
 import org.json4s.jackson.JsonMethods.parse
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -12,7 +12,7 @@ class ElectionSummaryTest extends FlatSpec with Matchers{
 
   "getElectionSummaries" should "parse the json correctly" in {
     val jValue = parse(electionJson)
-    val electionSummaries = DataFilesDownloader.getElectionSummariesFromJson(jValue)
+    val electionSummaries = VotingDataFilesDownloader.getElectionSummariesFromJson(jValue)
 
     electionSummaries.size shouldBe 2
 
@@ -30,7 +30,7 @@ class ElectionSummaryTest extends FlatSpec with Matchers{
   }
 
   "getElectionSummariesJson" should "return the json data" in {
-    val data = DataFilesDownloader.getElectionSummariesJson
+    val data = VotingDataFilesDownloader.getElectionSummariesJson
     data==null shouldBe false
     data.length>1 shouldBe true
   }

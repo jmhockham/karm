@@ -1,6 +1,6 @@
 package com.karm.dao
 
-import com.karm.datafeed.DataFilesDownloader
+import com.karm.datafeed.VotingDataFilesDownloader
 import com.karm.model.{Constituency, ElectionSummary, Member}
 import sorm.{Entity, InitMode, Instance}
 

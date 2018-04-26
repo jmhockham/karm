@@ -2,7 +2,7 @@ package com.karm.model
 
 import java.io.File
 
-import com.karm.datafeed.DataFilesDownloader
+import com.karm.datafeed.VotingDataFilesDownloader
 import org.json4s.jackson.JsonMethods.parse
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -12,7 +12,7 @@ class ConstituencyTest extends FlatSpec with Matchers{
 
   "getConstituents" should "parse the json correctly" in {
     val jValue = parse(constituenciesJson)
-    val constituents = DataFilesDownloader.getConstituentsFromJson(jValue)
+    val constituents = VotingDataFilesDownloader.getConstituentsFromJson(jValue)
 
     constituents.size shouldBe 10
 
@@ -30,7 +30,7 @@ class ConstituencyTest extends FlatSpec with Matchers{
   }
 
   "getConstituentsJson" should "return the json data" in {
-    val data = DataFilesDownloader.getConstituenciesJson
+    val data = VotingDataFilesDownloader.getConstituenciesJson
     data==null shouldBe false
     data.length>1 shouldBe true
   }

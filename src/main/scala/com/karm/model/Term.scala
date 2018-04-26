@@ -1,6 +1,5 @@
 package com.karm.model
 
-import com.fasterxml.jackson.annotation.JsonValue
 import org.json4s.{DefaultFormats, JValue}
 
 case class Term

@@ -1,14 +1,14 @@
 package com.karm.report
 
 import com.karm.dao.Database
-import com.karm.datafeed.DataFilesDownloader
+import com.karm.datafeed.VotingDataFilesDownloader
 import com.karm.model.ElectionSummary
 import org.json4s.jackson.JsonMethods.parse
 
 object ElectionReport extends App {
-  private val electionsJson = DataFilesDownloader.getElectionSummariesJson
+  private val electionsJson = VotingDataFilesDownloader.getElectionSummariesJson
   val jValue = parse(electionsJson)
-  val electionSummaries = DataFilesDownloader.getElectionSummariesFromJson(jValue)
+  val electionSummaries = VotingDataFilesDownloader.getElectionSummariesFromJson(jValue)
 
   val savedStuff = electionSummaries.map { e =>
     val summary = Database.save(e)

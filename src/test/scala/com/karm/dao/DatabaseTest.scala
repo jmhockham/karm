@@ -2,7 +2,7 @@ package com.karm.dao
 
 import java.io.File
 
-import com.karm.datafeed.DataFilesDownloader
+import com.karm.datafeed.VotingDataFilesDownloader
 import com.karm.model.{Constituency, ElectionSummary, Member}
 import org.json4s.jackson.JsonMethods.parse
 import org.scalatest.{FlatSpec, Matchers}
@@ -15,7 +15,7 @@ class DatabaseTest extends FlatSpec with Matchers {
 
   "Database" should "be able to persist constituency entities" in {
     val jValue = parse(electionJson)
-    val constituencies = DataFilesDownloader.getConstituentsFromJson(jValue)
+    val constituencies = VotingDataFilesDownloader.getConstituentsFromJson(jValue)
 
     //we can assign the results of an insert to a value
     val constituency = Database.save(constituencies.head)
@@ -28,7 +28,7 @@ class DatabaseTest extends FlatSpec with Matchers {
 
   it should "be able to persist election entities" in {
     val jValue = parse(constituenciesJson)
-    val electionSummaries = DataFilesDownloader.getElectionSummariesFromJson(jValue)
+    val electionSummaries = VotingDataFilesDownloader.getElectionSummariesFromJson(jValue)
 
     val electionSummary = Database.save(electionSummaries.head)
     electionSummary.id shouldBe 1
@@ -40,7 +40,7 @@ class DatabaseTest extends FlatSpec with Matchers {
 
   it should "be able to persist member entities" in {
     val jValue = parse(membersJson)
-    val members = DataFilesDownloader.getMembersFromJson(jValue)
+    val members = VotingDataFilesDownloader.getMembersFromJson(jValue)
 
     val member = Database.save(members.head)
     member.id shouldBe 1

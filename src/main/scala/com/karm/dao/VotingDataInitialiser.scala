@@ -1,27 +1,27 @@
 package com.karm.dao
 
-import com.karm.datafeed.DataFilesDownloader
-import com.karm.model.Member
+import com.karm.datafeed.VotingDataFilesDownloader
+import com.karm.model.{Member, Term}
 import org.apache.log4j._
 import com.typesafe.scalalogging.Logger
 
 import scala.Predef.ArrowAssoc
 
-object DataInitialiser {
+object VotingDataInitialiser {
 
   private val productionLogger = Logger(getClass)
 
   def init() = {
     productionLogger.debug("Persisting election summaries")
-    val electionSummaries = DataFilesDownloader.getElectionSummaries()
+    val electionSummaries = VotingDataFilesDownloader.getElectionSummaries()
     electionSummaries.map(Database.save(_))
 
     productionLogger.debug("Persisting constituencies")
-    val constituencies = DataFilesDownloader.getConstituents()
+    val constituencies = VotingDataFilesDownloader.getConstituents()
     val savedConstituencies = constituencies.map(Database.save(_))
 
     productionLogger.debug("Persisting members")
-    val members = DataFilesDownloader.getMembers()
+    val members = VotingDataFilesDownloader.getMembers()
     val membersOfCommons: List[Member] = members.filter(!_.isInLords).map { m =>
       val url = m.constituencyUrl
       val constituenciesFiltered = savedConstituencies.filter(_.resourceUrl == url)
@@ -40,8 +40,18 @@ object DataInitialiser {
     membersOfCommons.map(Database.save(_))
     membersOfLords.map(Database.save(_))
 
+    //terms can be nested, so need to check broader/exact children (this is a restriction of SORM)
     productionLogger.debug("Persisting terms")
-    val terms = DataFilesDownloader.getTerms()
+    val terms = VotingDataFilesDownloader.getTerms()
+    terms.map { term =>
+      val possibleExactTerm: Option[Term] = term.exactTermJson.map { json =>
+        Database.save(Term.fromJson(json))
+      }
+      val possibleBroaderTerm: Option[Term] = term.broaderTermJson.map { json =>
+        Database.save(Term.fromJson(json))
+      }
+      term.copy(exactTerm = possibleExactTerm, broaderTerm = possibleBroaderTerm)
+    }
     terms.map(Database.save(_))
   }
 }

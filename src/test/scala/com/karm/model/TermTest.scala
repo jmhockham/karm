@@ -2,7 +2,7 @@ package com.karm.model
 
 import java.io.File
 
-import com.karm.datafeed.DataFilesDownloader
+import com.karm.datafeed.VotingDataFilesDownloader
 import org.json4s.jackson.JsonMethods.parse
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -12,7 +12,7 @@ class TermTest extends FlatSpec with Matchers {
 
   "getTermsFromJson" should "parse the json data correctly" in {
     val jValue = parse(termsJson)
-    val terms = DataFilesDownloader.getTermsFromJson(jValue)
+    val terms = VotingDataFilesDownloader.getTermsFromJson(jValue)
 
     terms.size shouldBe 10000
 
@@ -30,13 +30,13 @@ class TermTest extends FlatSpec with Matchers {
   }
 
   "getTermsJson" should "return the json data" in {
-    val data = DataFilesDownloader.getTermsJson(0)
+    val data = VotingDataFilesDownloader.getTermsJson(0)
     data==null shouldBe false
     data.length>0 shouldBe true
   }
 
   "getTerms" should "get all the terms" in {
-    val terms = DataFilesDownloader.getTerms(7)
+    val terms = VotingDataFilesDownloader.getTerms(7)
     terms.size shouldBe 79576
   }
 

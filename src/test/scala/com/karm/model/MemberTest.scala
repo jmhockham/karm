@@ -2,7 +2,7 @@ package com.karm.model
 
 import java.io.File
 
-import com.karm.datafeed.DataFilesDownloader
+import com.karm.datafeed.VotingDataFilesDownloader
 import org.json4s.jackson.JsonMethods.parse
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -12,7 +12,7 @@ class MemberTest extends FlatSpec with Matchers {
 
   "getMembers" should "parse the json correctly" in {
     val jValue = parse(memberJson)
-    val members = DataFilesDownloader.getMembersFromJson(jValue)
+    val members = VotingDataFilesDownloader.getMembersFromJson(jValue)
 
     members.size shouldBe 4434
 
@@ -25,7 +25,7 @@ class MemberTest extends FlatSpec with Matchers {
   }
 
   "getMembersJson" should "return the json data" in {
-    val data = DataFilesDownloader.getMembersJson
+    val data = VotingDataFilesDownloader.getMembersJson
     data==null shouldBe false
     data.length>1 shouldBe true
   }

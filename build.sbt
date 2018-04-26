@@ -14,6 +14,8 @@ libraryDependencies ++= Seq(
   "org.sorm-framework" % "sorm" % "0.3.21",
   "com.h2database" % "h2" % "1.4.192",
   "org.apache.kafka" %% "kafka" % "0.10.1.1",
+  "org.apache.commons" % "commons-lang3" % "3.3.2",
+  "commons-logging" % "commons-logging" % "1.2",
   "org.apache.logging.log4j" %% "log4j-api-scala" % "11.0",
   "org.postgresql" % "postgresql" % "42.1.1"
 )
