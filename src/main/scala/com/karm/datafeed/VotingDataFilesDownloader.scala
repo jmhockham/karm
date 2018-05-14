@@ -1,6 +1,7 @@
 package com.karm.datafeed
 
-import com.karm.model.{Constituency, ElectionSummary, Member, Term}
+import com.karm.model.voting.{Constituency, ElectionSummary, Member, Term}
+import com.karm.model.voting.{ElectionSummary, Member, Term}
 import org.json4s.{DefaultFormats, JValue}
 import org.json4s.jackson.JsonMethods.parse
 

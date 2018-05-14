@@ -17,6 +17,7 @@ libraryDependencies ++= Seq(
   "org.apache.commons" % "commons-lang3" % "3.3.2",
   "commons-logging" % "commons-logging" % "1.2",
   "org.apache.logging.log4j" %% "log4j-api-scala" % "11.0",
+  "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1",
   "org.postgresql" % "postgresql" % "42.1.1"
 )
 

@@ -3,7 +3,8 @@ package com.karm.dao
 import java.io.File
 
 import com.karm.datafeed.VotingDataFilesDownloader
-import com.karm.model.{Constituency, ElectionSummary, Member}
+import com.karm.model.voting.{Constituency, ElectionSummary, Member}
+import com.karm.model.voting.{ElectionSummary, Member}
 import org.json4s.jackson.JsonMethods.parse
 import org.scalatest.{FlatSpec, Matchers}
 

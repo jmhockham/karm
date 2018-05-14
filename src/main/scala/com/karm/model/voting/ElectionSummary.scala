@@ -1,4 +1,4 @@
-package com.karm.model
+package com.karm.model.voting
 
 import org.json4s.DefaultFormats
 import org.json4s.JsonAST.JValue

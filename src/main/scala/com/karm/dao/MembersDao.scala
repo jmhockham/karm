@@ -1,6 +1,6 @@
 package com.karm.dao
 
-import com.karm.model.Member
+import com.karm.model.voting.Member
 import sorm.Dsl._
 
 object MembersDao {

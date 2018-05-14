@@ -1,7 +1,8 @@
 package com.karm.dao
 
 import com.karm.datafeed.VotingDataFilesDownloader
-import com.karm.model.{Member, Term}
+import com.karm.model.voting.Term
+import com.karm.model.voting.{Member, Term}
 import org.apache.log4j._
 import com.typesafe.scalalogging.Logger
 

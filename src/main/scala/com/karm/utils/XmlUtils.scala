@@ -108,5 +108,9 @@ object XmlUtils {
     case e: Elem => e.copy(child = e.child ++ newChildren)
   }
 
+  def xmlFromString(input: String): NodeSeq = {
+    XML.loadString(s"<holder>$input</holder>").child
+  }
+
 }
 

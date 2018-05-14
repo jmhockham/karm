@@ -2,7 +2,7 @@ package com.karm.report
 
 import com.karm.dao.Database
 import com.karm.datafeed.VotingDataFilesDownloader
-import com.karm.model.ElectionSummary
+import com.karm.model.voting.ElectionSummary
 import org.json4s.jackson.JsonMethods.parse
 
 object ElectionReport extends App {

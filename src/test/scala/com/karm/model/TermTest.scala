@@ -3,6 +3,7 @@ package com.karm.model
 import java.io.File
 
 import com.karm.datafeed.VotingDataFilesDownloader
+import com.karm.model.voting.Term
 import org.json4s.jackson.JsonMethods.parse
 import org.scalatest.{FlatSpec, Matchers}
 
