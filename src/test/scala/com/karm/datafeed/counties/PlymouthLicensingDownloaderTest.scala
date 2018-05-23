@@ -7,7 +7,7 @@ import com.karm.utils.XmlUtils._
 
 class PlymouthLicensingDownloaderTest extends FlatSpec with Matchers {
   "getPageData" should "return the html for a url call" in {
-    val html = PlymouthLicensingDownloader.getPageData(162)
+    val html = PlymouthLicensingDownloader.getPageData(700)
     html.nonEmpty shouldBe true
     val venueUrls = (html \\ "td" \ "a").filter(node => (node \@ "href").contains("LicensingActPremises/Search/") ).map(_ \@ "href")
     venueUrls.nonEmpty shouldBe true
@@ -33,5 +33,12 @@ class PlymouthLicensingDownloaderTest extends FlatSpec with Matchers {
     val company: Company = Company.fromCompaniesHouseResult(companyId, rawHtml)
     val companyFromPersist = Database.save(company)
     companyFromPersist.companyId shouldBe companyId
+  }
+
+  "all page data" should "be able to be persisted" in {
+    val pageHtml = PlymouthLicensingDownloader.getAllPages()
+    val companies = pageHtml.map(Company.fromCompaniesHouseResult(-1,_))
+    val savedResults = companies.map(Database.save(_))
+    savedResults.size shouldBe PlymouthLicensingDownloader.MAX_PAGE_NUMBER
   }
 }
