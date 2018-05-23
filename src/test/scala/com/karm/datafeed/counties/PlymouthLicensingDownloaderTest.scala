@@ -30,7 +30,7 @@ class PlymouthLicensingDownloaderTest extends FlatSpec with Matchers {
   "the case class" should "parse the raw data, and be persisted" in {
     val companyId = 10271532
     val rawHtml = PlymouthLicensingDownloader.getCompanyData(companyId)
-    val company = Company.fromCompaniesHouseResult(companyId, rawHtml)
+    val company: Company = Company.fromCompaniesHouseResult(companyId, rawHtml)
     val companyFromPersist = Database.save(company)
     companyFromPersist.companyId shouldBe companyId
   }
