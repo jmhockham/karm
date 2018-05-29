@@ -38,6 +38,12 @@ trait AbstractDataFilesDownloader {
 
   def getPageData(pageNo: Int): NodeSeq = ???
 
+  def getCompaniesData(): Seq[Company] = ???
+
+  def persistAllCompanies(): Unit = {
+    getCompaniesData().map(persistCompany)
+  }
+
   def persistCompany(company: Company): Company = {
     Database.save(company)
   }

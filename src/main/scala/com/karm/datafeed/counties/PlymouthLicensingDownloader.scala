@@ -2,6 +2,7 @@ package com.karm.datafeed.counties
 
 import java.net.{HttpURLConnection, URL}
 
+import com.karm.model.licensing.Company
 import org.xml.sax.InputSource
 
 import scala.xml.{Node, NodeSeq, XML}
@@ -88,11 +89,18 @@ object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
   def getAllPages(currentPageNo: Int = 1, seqToReturn: Seq[NodeSeq] = Seq.empty): Seq[NodeSeq] = {
     val pageData = getPageData(currentPageNo)
     if (currentPageNo == MAX_PAGE_NUMBER) {
-      pageData
+      seqToReturn ++ pageData
     }
     else {
       getAllPages(currentPageNo + 1, seqToReturn ++ pageData)
     }
+  }
+
+  val countyName = "Plymouth"
+
+  override def getCompaniesData(): Seq[Company] = {
+    val nodeSeqs = getAllPages()
+    nodeSeqs.map(Company.fromCompaniesHouseResult(-1,countyName,_))
   }
 
 }
