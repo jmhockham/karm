@@ -1,7 +1,7 @@
 package com.karm.dao
 
 import com.karm.datafeed.VotingDataFilesDownloader
-import com.karm.model.licensing.Company
+import com.karm.model.licensing.{CompaniesHouseResult, Company}
 import com.karm.model.voting.{Constituency, ElectionSummary, Member}
 import sorm.{Entity, InitMode, Instance}
 
@@ -13,7 +13,8 @@ object Database extends Instance(
     Entity[Constituency](),
     Entity[ElectionSummary](),
     Entity[Member](),
-    Entity[Company]()
+    Entity[Company](),
+    Entity[CompaniesHouseResult]()
   ),
 //  url = "jdbc:h2:mem:test;MODE=PostgreSQL",
   url = "jdbc:postgresql://localhost/karm",
