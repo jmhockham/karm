@@ -3,7 +3,7 @@ package com.karm.model.licensing
 import scala.xml.{Node, NodeSeq}
 
 case class Company (
-   companyId: Int,
+   companyId: String,
    countyName: String,
    companiesHouseResults: Seq[CompaniesHouseResult],
    rawData: String
@@ -13,11 +13,11 @@ case class Company (
 }
 
 object Company {
-  def fromSingleSearchResult(id: Int, countyName: String, rawData: NodeSeq): Company = {
+  def fromSingleSearchResult(id: String, countyName: String, rawData: NodeSeq): Company = {
     new Company(id, countyName, Nil, rawData.mkString)
   }
 
-  def fromMultipleSearchResults(id: Int, countyName: String, searchResults: Seq[CompaniesHouseResult]): Company = {
+  def fromMultipleSearchResults(id: String, countyName: String, searchResults: Seq[CompaniesHouseResult]): Company = {
     new Company(id, countyName, searchResults, "")
   }
 }

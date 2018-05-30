@@ -3,13 +3,15 @@ package com.karm.datafeed.counties
 import java.net.{HttpURLConnection, URL}
 
 import com.karm.dao.Database
-import com.karm.model.licensing.Company
+import com.karm.model.licensing.{CompaniesHouseResult, Company}
 import org.xml.sax.InputSource
 
 import scala.xml.{Node, NodeSeq}
 import scala.xml.parsing.NoBindingFactoryAdapter
 
 trait AbstractDataFilesDownloader {
+
+  val companyUrlPrefix = "https://beta.companieshouse.gov.uk/company/"
 
   protected def callUrl(url: String): String = {
     scala.io.Source.fromURL(url).mkString
@@ -28,12 +30,23 @@ trait AbstractDataFilesDownloader {
     adapter.loadXML(source, parser)
   }
 
-  def searchCompaniesHouse(companyName: String): Node = {
+  def searchCompaniesHouse(companyName: String): NodeSeq = {
     getXmlFromUrl(s"https://beta.companieshouse.gov.uk/search/companies?q=$companyName")
   }
 
-  def getCompanyData(companyId: Int): Node = {
-    getXmlFromUrl(s"https://beta.companieshouse.gov.uk/company/$companyId")
+  def getCompanyIdsFromSearchResults(searchResultsHtml: NodeSeq): Seq[String] = {
+    val companies = (searchResultsHtml \\ "ul").filter(node => (node \@ "id")=="results") \\ "a"
+    companies.map(html => (html \@ "href").replaceAll("/company/",""))
+  }
+
+  def getCompanyResultsFromSearch(companyName: String): Seq[CompaniesHouseResult] = {
+    val resultsHtml = searchCompaniesHouse(companyName)
+    val companyIds = getCompanyIdsFromSearchResults(resultsHtml)
+    companyIds.map(id => new CompaniesHouseResult(companyUrlPrefix + id, getCompanyData(id).mkString))
+  }
+
+  def getCompanyData(companyId: String): Node = {
+    getXmlFromUrl(companyUrlPrefix + companyId)
   }
 
   def getPageData(pageNo: Int): NodeSeq = ???

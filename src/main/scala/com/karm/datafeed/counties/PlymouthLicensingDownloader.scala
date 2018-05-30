@@ -100,7 +100,7 @@ object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
 
   override def getCompaniesData(): Seq[Company] = {
     val nodeSeqs = getAllPages()
-    nodeSeqs.map(Company.fromSingleSearchResult(-1,countyName,_))
+    nodeSeqs.map(Company.fromSingleSearchResult("-1",countyName,_))
   }
 
 }
