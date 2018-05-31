@@ -13,8 +13,8 @@ case class Company (
 }
 
 object Company {
-  def fromSingleSearchResult(id: String, countyName: String, rawData: NodeSeq): Company = {
-    new Company(id, countyName, Nil, rawData.mkString)
+  def fromSingleSearchResult(id: String, countyName: String, rawData: String): Company = {
+    new Company(id, countyName, Nil, rawData)
   }
 
   def fromMultipleSearchResults(id: String, countyName: String, searchResults: Seq[CompaniesHouseResult]): Company = {

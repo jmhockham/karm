@@ -9,6 +9,7 @@ import scala.xml.{Node, NodeSeq, XML}
 import com.karm.utils.XmlUtils._
 
 import scala.annotation.tailrec
+import scala.collection.immutable
 import scala.xml.parsing.NoBindingFactoryAdapter
 
 object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
@@ -70,14 +71,15 @@ object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
   private val baseSearchUrl = "https://licensing.plymouth.gov.uk/1/LicensingActPremises/Search"
   private val postfixUrlAgrs = "&SearchPremisesWithRepresentationsOnly=false&Column=OPR_NAME&Direction=Ascending"
   /*
-  this needs to be dynamic (can be worked out from the final span elem)
+  MAX_PAGE_NUMBER needs to be dynamic (can be worked out from the final span elem)
   eg:
   <span class="clsIdoxPagerItemSpan clsIdoxPagerPageLinkSpan"><a class="clsIdoxPagerOtherPageLink" href="/1/LicensingActPremises/Search?page=163&amp;SearchPremisesWithRepresentationsOnly=false&amp;Column=OPR_NAME&amp;Direction=Ascending">163</a></span>
   <span class="clsIdoxPagerItemSpan clsIdoxPagerNextPrevSpan"><a href="/1/LicensingActPremises/Search?page=2&amp;SearchPremisesWithRepresentationsOnly=false&amp;Column=OPR_NAME&amp;Direction=Ascending"><img alt="Next page of results." src="/Content/images/pagerright.jpg"></a></span>
 
   "Next page of results" is just after the final pageNo
   */
-  val MAX_PAGE_NUMBER = 162
+  val MAX_PAGE_NUMBER = 167
+  val countyName = "Plymouth"
 
   override def getPageData(pageNo: Int): NodeSeq = {
     val urlString = baseSearchUrl + s"?page=$pageNo" + postfixUrlAgrs
@@ -85,8 +87,16 @@ object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
     xmlFromUrl(url)
   }
 
+  private [counties] def getVenueUrlsFromPageHtml(html: NodeSeq): Seq[String] = {
+    (html \\ "td" \ "a").filter(node => (node \@ "href").contains("LicensingActPremises/Search/") ).map(_ \@ "href")
+  }
+
+  private [counties] def getVenueNamesFromPageHtml(html: NodeSeq): Seq[String] = {
+    (html \\ "td" \ "a").filter(node => (node \@ "href").contains("LicensingActPremises/Search/") ).map(_.text)
+  }
+
   @tailrec
-  def getAllPages(currentPageNo: Int = 1, seqToReturn: Seq[NodeSeq] = Seq.empty): Seq[NodeSeq] = {
+  private [counties] def getAllPages(currentPageNo: Int = 1, seqToReturn: Seq[NodeSeq] = Seq.empty): Seq[NodeSeq] = {
     val pageData = getPageData(currentPageNo)
     if (currentPageNo == MAX_PAGE_NUMBER) {
       seqToReturn ++ pageData
@@ -96,11 +106,20 @@ object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
     }
   }
 
-  val countyName = "Plymouth"
-
   override def getCompaniesData(): Seq[Company] = {
     val nodeSeqs = getAllPages()
-    nodeSeqs.map(Company.fromSingleSearchResult("-1",countyName,_))
+    nodeSeqs.flatMap(getVenueNamesFromPageHtml(_).map { name =>
+      val results = getCompanyResultsFromSearch(name)
+      if (results.size > 1) {
+        Company.fromMultipleSearchResults("-1", countyName, results)
+      }
+      else {
+        //          val companyId = getCompanyIdsFromSearchResults(results.head).head
+        Company.fromSingleSearchResult("2", countyName, results.head.pageHtml)
+      }
+    })
+
+//    nodeSeqs.map(Company.fromSingleSearchResult("-1",countyName,_))
   }
 
 }
