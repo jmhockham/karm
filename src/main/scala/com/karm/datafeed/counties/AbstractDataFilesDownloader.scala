@@ -31,7 +31,8 @@ trait AbstractDataFilesDownloader {
   }
 
   def searchCompaniesHouse(companyName: String): NodeSeq = {
-    getXmlFromUrl(s"https://beta.companieshouse.gov.uk/search/companies?q=$companyName")
+    val sanitizedName = companyName.replaceAll(" ","%20")
+    getXmlFromUrl(s"https://beta.companieshouse.gov.uk/search/companies?q=$sanitizedName")
   }
 
   def getCompanyIdsFromSearchResults(searchResultsHtml: NodeSeq): Seq[String] = {
