@@ -1,5 +1,6 @@
 package com.karm.datafeed.counties
 
+import java.io.IOException
 import java.net.{HttpURLConnection, URL}
 
 import com.karm.dao.Database
@@ -26,7 +27,17 @@ trait AbstractDataFilesDownloader {
     val conn = url.openConnection().asInstanceOf[HttpURLConnection]
     for ((k, v) <- headers)
       conn.setRequestProperty(k, v)
-    val source = new InputSource(conn.getInputStream)
+    val stream = try {
+      conn.getInputStream
+    } catch {
+      case _: IOException =>
+        //means we hit a 403 (Forbidden), because we spammed the site too much; so we sleep for 15 mins
+        println("Hit IOException from search (probably a 403?), so sleeping for 15 mins")
+        Thread.sleep(900000)
+        conn.getInputStream
+      case e:Throwable => println("ERROR: "+e.toString);null
+    }
+    val source = new InputSource(stream)
     adapter.loadXML(source, parser)
   }
 
@@ -52,10 +63,10 @@ trait AbstractDataFilesDownloader {
 
   def getPageData(pageNo: Int): NodeSeq = ???
 
-  def getCompaniesData(): Seq[Company] = ???
+  def persistCompaniesData(): Seq[Company] = ???
 
   def persistAllCompanies(): Unit = {
-    getCompaniesData().map(persistCompany)
+    persistCompaniesData().map(persistCompany)
   }
 
   def persistCompany(company: Company): Company = {

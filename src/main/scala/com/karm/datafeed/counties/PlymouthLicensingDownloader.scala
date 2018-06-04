@@ -2,6 +2,7 @@ package com.karm.datafeed.counties
 
 import java.net.{HttpURLConnection, URL}
 
+import com.karm.dao.Database
 import com.karm.model.licensing.Company
 import org.xml.sax.InputSource
 
@@ -106,20 +107,22 @@ object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
     }
   }
 
-  override def getCompaniesData(): Seq[Company] = {
+  override def persistCompaniesData(): Seq[Company] = {
     val nodeSeqs = getAllPages()
     nodeSeqs.flatMap(getVenueNamesFromPageHtml(_).map { name =>
       val results = getCompanyResultsFromSearch(name)
       if (results.size > 1) {
-        Company.fromMultipleSearchResults("-1", countyName, results)
+        val company = Company.fromMultipleSearchResults("-1", countyName, results)
+        Database.save(company)
       }
       else {
-        //          val companyId = getCompanyIdsFromSearchResults(results.head).head
-        Company.fromSingleSearchResult("2", countyName, results.head.pageHtml)
+        // val companyId = getCompanyIdsFromSearchResults(results.head).head
+        val company = Company.fromSingleSearchResult("2", countyName, results.head.pageHtml)
+        Database.save(company)
       }
     })
 
-//    nodeSeqs.map(Company.fromSingleSearchResult("-1",countyName,_))
+  // nodeSeqs.map(Company.fromSingleSearchResult("-1",countyName,_))
   }
 
 }

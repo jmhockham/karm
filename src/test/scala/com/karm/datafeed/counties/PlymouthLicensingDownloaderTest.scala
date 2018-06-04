@@ -70,7 +70,7 @@ class PlymouthLicensingDownloaderTest extends FlatSpec with Matchers {
   }
 
   "getCompaniesData" should "parse the html results into company entities" in {
-    val companies = PlymouthLicensingDownloader.getCompaniesData()
+    val companies = PlymouthLicensingDownloader.persistCompaniesData()
     companies.nonEmpty shouldBe true
   }
 }
