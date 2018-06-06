@@ -107,9 +107,10 @@ object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
     }
   }
 
-  override def persistCompaniesData(): Seq[Company] = {
+  override def persistCompaniesData(maxLimit: Int = 0): Seq[Company] = {
     val nodeSeqs = getAllPages()
-    nodeSeqs.flatMap(getVenueNamesFromPageHtml(_).map { name =>
+    val nodesToCheck = if(maxLimit>0) nodeSeqs.slice(0,maxLimit) else nodeSeqs
+    nodesToCheck.flatMap(getVenueNamesFromPageHtml(_).map { name =>
       val results = getCompanyResultsFromSearch(name)
       if (results.size > 1) {
         val company = Company.fromMultipleSearchResults("-1", countyName, results)

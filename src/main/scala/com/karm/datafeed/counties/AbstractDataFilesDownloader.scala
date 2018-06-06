@@ -63,7 +63,7 @@ trait AbstractDataFilesDownloader {
 
   def getPageData(pageNo: Int): NodeSeq = ???
 
-  def persistCompaniesData(): Seq[Company] = ???
+  def persistCompaniesData(maxLimit: Int = 10): Seq[Company] = ???
 
   def persistAllCompanies(): Unit = {
     persistCompaniesData().map(persistCompany)
