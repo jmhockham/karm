@@ -23,14 +23,14 @@ class PlymouthLicensingDownloaderTest extends FlatSpec with Matchers {
   "the case class" should "parse the raw data, and be persisted" in {
     val companyId = "10271532"
     val rawHtml = PlymouthLicensingDownloader.getCompanyData(companyId)
-    val company: Company = Company.fromSingleSearchResult(companyId, "Plymouth", rawHtml.mkString)
+    val company: Company = Company.fromSingleSearchResult(companyId, "test", "Plymouth", rawHtml.mkString)
     val companyFromPersist = Database.save(company)
     companyFromPersist.companyId shouldBe companyId
   }
 
   "all page data" should "be able to be persisted" in {
     val pageHtml = PlymouthLicensingDownloader.getAllPages()
-    val companies = pageHtml.map(html => Company.fromSingleSearchResult("-1", "Plymouth", html.mkString))
+    val companies = pageHtml.map(html => Company.fromSingleSearchResult("-1", "test", "Plymouth", html.mkString))
     val savedResults = companies.map(Database.save(_))
     savedResults.size shouldBe PlymouthLicensingDownloader.MAX_PAGE_NUMBER
   }
@@ -70,7 +70,8 @@ class PlymouthLicensingDownloaderTest extends FlatSpec with Matchers {
   }
 
   "getCompaniesData" should "parse the html results into company entities" in {
-    val companies = PlymouthLicensingDownloader.persistCompaniesData()
+    val companies = PlymouthLicensingDownloader.persistCompaniesData(10)
     companies.nonEmpty shouldBe true
+    companies.size shouldBe 10
   }
 }
