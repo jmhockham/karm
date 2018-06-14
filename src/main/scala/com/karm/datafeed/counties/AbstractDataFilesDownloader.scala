@@ -14,6 +14,7 @@ trait AbstractDataFilesDownloader {
 
   val COMPANIES_HOUSE_URL_PREFIX = "https://beta.companieshouse.gov.uk/company/"
   val COMPANIES_HOUSE_API_KEY = "T8a-MEUBsY6wXn4SedbuWOiW6fD2ZxE1ivL3uBmM"
+  val GOOGLE_API_KEY = "AIzaSyDKudzx8i1Z4WJLcbydUGJjF1SxT1Ayxo0"
 
   protected def callUrl(url: String): String = {
     scala.io.Source.fromURL(url).mkString
@@ -78,6 +79,21 @@ trait AbstractDataFilesDownloader {
 
   def persistCompany(company: Company): Company = {
     Database.save(company)
+  }
+
+  //Google API key:
+  val googleApiKey = "AIzaSyDKudzx8i1Z4WJLcbydUGJjF1SxT1Ayxo0"
+
+  def getMapsSearchUrl(queryTerms: String): String = {
+    val sanitizedSearchTerms = queryTerms.replaceAll(" ","+").replaceAll(",","%2C")
+    val url = s"https://www.google.com/maps/search/?api=$googleApiKey&query=$sanitizedSearchTerms"
+    url
+  }
+
+  def gtMapsGeocodingUrl(address: String): String = {
+    val sanitizedAddress = address.replaceAll(" ","+").replaceAll(",","%2C")
+    val url = s"https://maps.googleapis.com/maps/api/geocode/json?address=$sanitizedAddress&key=$googleApiKey"
+    url
   }
 
   private def getXmlFromUrl(urlString: String, headers: Map[String, String] = Map.empty): Node = {

@@ -79,7 +79,7 @@ object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
 
   "Next page of results" is just after the final pageNo
   */
-  val MAX_PAGE_NUMBER = 167
+  val MAX_COMPANY_LIMIT = 0
   val countyName = "Plymouth"
 
   override def getPageData(pageNo: Int): NodeSeq = {
@@ -99,7 +99,7 @@ object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
   @tailrec
   private [counties] def getAllPages(currentPageNo: Int = 1, seqToReturn: Seq[NodeSeq] = Seq.empty): Seq[NodeSeq] = {
     val pageData = getPageData(currentPageNo)
-    if (currentPageNo == MAX_PAGE_NUMBER) {
+    if (currentPageNo == MAX_COMPANY_LIMIT) {
       seqToReturn ++ pageData
     }
     else {
@@ -107,18 +107,19 @@ object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
     }
   }
 
-  override def persistCompaniesData(maxLimit: Int = MAX_PAGE_NUMBER): Seq[Company] = {
+  override def persistCompaniesData(maxLimit: Int = MAX_COMPANY_LIMIT): Seq[Company] = {
     val nodeSeqs = getAllPages()
-    val names = nodeSeqs.flatMap(getVenueNamesFromPageHtml)
-    names.slice(0,maxLimit).map { name =>
+    val unfilteredNames = nodeSeqs.flatMap(getVenueNamesFromPageHtml)
+    val namesToProcess = if (maxLimit > 0) unfilteredNames.slice(0, maxLimit) else unfilteredNames
+    namesToProcess.map { name =>
       /*val results = getCompanyResultsFromSearch(name)
+      results.map(Database.save(_))
       if (results.size > 1) {
         val company = Company.fromMultipleSearchResults("-1", name, countyName, Nil)
         Database.save(company)
       }
       else {
         // val companyId = getCompanyIdsFromSearchResults(results.head).head
-        results.map(Database.save(_))
         val company = Company.fromSingleSearchResult("2", name, countyName, results.head.pageHtml)
         Database.save(company)
       }*/

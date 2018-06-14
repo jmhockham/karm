@@ -32,7 +32,7 @@ class PlymouthLicensingDownloaderTest extends FlatSpec with Matchers {
     val pageHtml = PlymouthLicensingDownloader.getAllPages()
     val companies = pageHtml.map(html => Company.fromSingleSearchResult("-1", "test", "Plymouth", html.mkString))
     val savedResults = companies.map(Database.save(_))
-    savedResults.size shouldBe PlymouthLicensingDownloader.MAX_PAGE_NUMBER
+    savedResults.size shouldBe PlymouthLicensingDownloader.MAX_COMPANY_LIMIT
   }
 
   "parseCompaniesHouseSearchResults" should "handle multiple results" in {
