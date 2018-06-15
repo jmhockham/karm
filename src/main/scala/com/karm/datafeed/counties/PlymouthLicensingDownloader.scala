@@ -79,7 +79,7 @@ object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
 
   "Next page of results" is just after the final pageNo
   */
-  val MAX_COMPANY_LIMIT = 0
+  val MAX_COMPANY_LIMIT = 167
   val countyName = "Plymouth"
 
   override def getPageData(pageNo: Int): NodeSeq = {
