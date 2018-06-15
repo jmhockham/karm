@@ -121,7 +121,7 @@ object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
     val unfilteredNames = nodeSeqs.flatMap(getVenueNamesFromPageHtml)
     val namesToProcess = if (maxLimit > 0) unfilteredNames.slice(0, maxLimit) else unfilteredNames
     namesToProcess.map { name =>
-      /*val results = getCompanyResultsFromSearch(name)
+      val results = getCompanyResultsFromSearch(name)
       results.map(Database.save(_))
       if (results.size > 1) {
         val company = Company.fromMultipleSearchResults("-1", name, countyName, Nil)
@@ -131,9 +131,9 @@ object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
         // val companyId = getCompanyIdsFromSearchResults(results.head).head
         val company = Company.fromSingleSearchResult("2", name, countyName, results.head.pageHtml)
         Database.save(company)
-      }*/
-      val company = Company.fromMultipleSearchResults("-1", name, countyName, Nil)
-      Database.save(company)
+      }
+      /*val company = Company.fromMultipleSearchResults("-1", name, countyName, Nil)
+      Database.save(company)*/
     }
 
   // nodeSeqs.map(Company.fromSingleSearchResult("-1",countyName,_))

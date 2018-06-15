@@ -10,15 +10,15 @@ case class Company (
    countyName: String,
    companiesHouseResults: Seq[CompaniesHouseResult],
    rawData: String
-) extends UrlFunctions
+) /*extends UrlFunctions*/
 {
   /**
     * Goes off to companies house and gets the search results (from trying to find this companies name)
     * @return the xml of the search results page (limited to the first 20 entries)
     */
-  def companiesHouseSearchResults: NodeSeq = {
+  /*def companiesHouseSearchResults: NodeSeq = {
     searchCompaniesHouse(name)
-  }
+  }*/
 }
 
 object Company {
