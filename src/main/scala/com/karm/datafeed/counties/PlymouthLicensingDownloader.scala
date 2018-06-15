@@ -79,13 +79,22 @@ object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
 
   "Next page of results" is just after the final pageNo
   */
-  val MAX_COMPANY_LIMIT = 167
   val countyName = "Plymouth"
 
   override def getPageData(pageNo: Int): NodeSeq = {
     val urlString = baseSearchUrl + s"?page=$pageNo" + postfixUrlAgrs
     val url = new URL(urlString)
     xmlFromUrl(url)
+  }
+
+  protected [counties] def getMaxPageResultNumber(): Int = {
+    val firstPageResults = getPageData(1)
+    val hrefs = (firstPageResults \\ "span" \\ "a").filter(node => (node \@ "href").contains("LicensingActPremises/Search")).map(_ \@ "href")
+    val pageNoStrs = hrefs.map(href =>
+      href.substring(href.indexOf("?page=")+6, href.indexOf("&"))
+    )
+    val sortedPageNos = pageNoStrs.map(_.toInt).sortWith(_ > _)
+    sortedPageNos.head
   }
 
   private [counties] def getVenueUrlsFromPageHtml(html: NodeSeq): Seq[String] = {
@@ -97,9 +106,9 @@ object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
   }
 
   @tailrec
-  private [counties] def getAllPages(currentPageNo: Int = 1, seqToReturn: Seq[NodeSeq] = Seq.empty): Seq[NodeSeq] = {
+  private [counties] def getAllPages(currentPageNo: Int = 1, seqToReturn: Seq[NodeSeq] = Seq.empty, maxPages: Int = getMaxPageResultNumber()): Seq[NodeSeq] = {
     val pageData = getPageData(currentPageNo)
-    if (currentPageNo == MAX_COMPANY_LIMIT) {
+    if (currentPageNo == maxPages) {
       seqToReturn ++ pageData
     }
     else {
@@ -107,8 +116,8 @@ object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
     }
   }
 
-  override def persistCompaniesData(maxLimit: Int = MAX_COMPANY_LIMIT): Seq[Company] = {
-    val nodeSeqs = getAllPages()
+  override def persistCompaniesData(maxLimit: Int = getMaxPageResultNumber()): Seq[Company] = {
+    val nodeSeqs = getAllPages(maxPages = maxLimit)
     val unfilteredNames = nodeSeqs.flatMap(getVenueNamesFromPageHtml)
     val namesToProcess = if (maxLimit > 0) unfilteredNames.slice(0, maxLimit) else unfilteredNames
     namesToProcess.map { name =>
