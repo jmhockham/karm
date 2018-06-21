@@ -8,6 +8,7 @@ import com.karm.model.licensing.{CompaniesHouseResult, Company}
 import com.karm.utils.UrlFunctions
 import org.xml.sax.InputSource
 
+import scala.annotation.tailrec
 import scala.xml.{Node, NodeSeq}
 import scala.xml.parsing.NoBindingFactoryAdapter
 
@@ -26,6 +27,19 @@ trait AbstractDataFilesDownloader extends UrlFunctions {
 
   def getCompanyData(companyId: String): Node = {
     getXmlFromUrl(COMPANIES_HOUSE_URL_PREFIX + companyId)
+  }
+
+  protected [counties] def getMaxPageResultNumber(): Int = ???
+
+  @tailrec
+  final def getAllPages(currentPageNo: Int = 1, seqToReturn: Seq[NodeSeq] = Seq.empty, maxPages: Int = getMaxPageResultNumber()): Seq[NodeSeq] = {
+    val pageData = getPageData(currentPageNo)
+    if (currentPageNo == maxPages) {
+      seqToReturn ++ pageData
+    }
+    else {
+      getAllPages(currentPageNo + 1, seqToReturn ++ pageData)
+    }
   }
 
   def getPageData(pageNo: Int): NodeSeq = ???

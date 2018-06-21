@@ -4,14 +4,9 @@ import java.net.{HttpURLConnection, URL}
 
 import com.karm.dao.Database
 import com.karm.model.licensing.Company
-import org.xml.sax.InputSource
 
-import scala.xml.{Node, NodeSeq, XML}
+import scala.xml.NodeSeq
 import com.karm.utils.XmlUtils._
-
-import scala.annotation.tailrec
-import scala.collection.immutable
-import scala.xml.parsing.NoBindingFactoryAdapter
 
 object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
 
@@ -87,7 +82,7 @@ object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
     xmlFromUrl(url)
   }
 
-  protected [counties] def getMaxPageResultNumber(): Int = {
+  override protected [counties] def getMaxPageResultNumber(): Int = {
     val firstPageResults = getPageData(1)
     val hrefs = (firstPageResults \\ "span" \\ "a").filter(node => (node \@ "href").contains("LicensingActPremises/Search")).map(_ \@ "href")
     val pageNoStrs = hrefs.map(href =>
@@ -103,17 +98,6 @@ object PlymouthLicensingDownloader extends AbstractDataFilesDownloader {
 
   private [counties] def getVenueNamesFromPageHtml(html: NodeSeq): Seq[String] = {
     (html \\ "td" \ "a").filter(node => (node \@ "href").contains("LicensingActPremises/Search/") ).map(_.text)
-  }
-
-  @tailrec
-  private [counties] def getAllPages(currentPageNo: Int = 1, seqToReturn: Seq[NodeSeq] = Seq.empty, maxPages: Int = getMaxPageResultNumber()): Seq[NodeSeq] = {
-    val pageData = getPageData(currentPageNo)
-    if (currentPageNo == maxPages) {
-      seqToReturn ++ pageData
-    }
-    else {
-      getAllPages(currentPageNo + 1, seqToReturn ++ pageData)
-    }
   }
 
   override def persistCompaniesData(maxLimit: Int = getMaxPageResultNumber()): Seq[Company] = {
