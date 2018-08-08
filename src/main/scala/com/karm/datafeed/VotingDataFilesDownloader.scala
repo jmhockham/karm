@@ -17,6 +17,11 @@ object VotingDataFilesDownloader extends App {
   format for a given entity, and the page size parameter
   http://lda.data.parliament.uk/members.json
   http://lda.data.parliament.uk/members.json?_pageSize=5000&_page=0
+
+  As the bandwidth is restricted for the direct calls, you can always web scrape (ugh)
+  the page where this is used:
+  https://www.parliament.uk/mps-lords-and-offices/mps/
+  Honestly may be easier than getting the actual data itself
   */
 
   def getElectionSummariesJson: String = {
@@ -34,34 +39,12 @@ object VotingDataFilesDownloader extends App {
     json
   }
 
-  //there are a bit less than 115,000 terms
+  //there are a bit less than 115,000 terms; about 22 pages
   //TODO append the rest of the terms - probably don't want to get them all in one hit
   //seems like we can only get up to page 7; 8+ throws a timeout every time
   def getTermsJson(pageNo: Int): String = {
     val json = callUrl(s"http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=$pageNo")
     json
-    /*json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=1")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=2")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=3")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=4")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=5")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=6")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=7")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=8")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=9")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=10")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=11")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=12")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=13")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=14")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=15")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=16")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=17")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=18")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=19")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=20")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=21")
-    json :+ callUrl("http://lda.data.parliament.uk/terms.json?_pageSize=5000&_page=22")*/
   }
 
   def getElectionSummariesFromJson(json: JValue): List[ElectionSummary] = {
