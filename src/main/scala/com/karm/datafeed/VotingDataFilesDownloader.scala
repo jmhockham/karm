@@ -24,6 +24,10 @@ object VotingDataFilesDownloader extends App {
   Honestly may be easier than getting the actual data itself
   */
 
+  // check financial interests here:
+  // https://www.parliament.uk/mps-lords-and-offices/standards-and-financial-interests/parliamentary-commissioner-for-standards/registers-of-interests/register-of-members-financial-interests/
+  // which leads to something like this:
+  // https://publications.parliament.uk/pa/cm/cmregmem/contents1617.htm
   def getElectionSummariesJson: String = {
     val json = callUrl("http://lda.data.parliament.uk/elections.json?_view=Elections&_pageSize=1000&_page=0")
     json
