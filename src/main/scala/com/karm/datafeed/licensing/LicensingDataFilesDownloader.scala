@@ -1,4 +1,4 @@
-package com.karm.datafeed
+package com.karm.datafeed.licensing
 
 object LicensingDataFilesDownloader {
 
